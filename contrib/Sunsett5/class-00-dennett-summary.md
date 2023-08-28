@@ -5,6 +5,8 @@ Current AI technology has already made it challenging for people, even the most 
 A possible consequence of this breakthrough, as Dennett described, is the "[the destruction] of not just economies but human freedom itself."
 Exploiting humans' natural tendency to imagine a person sitting across us in an online conversation, AI is able to feed in false information and manipulate people to make uninformed decisions.
 One of these decisions could be related to government policies, and thus the democratic freedom of informed voters could be threatened.
+While one important figure can persuade the crowd, AI technology has the ability to create new entities with better imitation.
+This implication elevate the negative impact of counterfeit people and call for a higher degree of regulations.
 
 distrust
 
@@ -14,4 +16,4 @@ that tells people of its artificial nature. Second, companies who manufacture de
 
 
 One main obstacle to the implementation of regulations against counterfeit people is that often
-multiply/ improve
+
