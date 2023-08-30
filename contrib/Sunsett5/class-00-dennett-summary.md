@@ -1,19 +1,14 @@
 Summary: "The Problem With Counterfeit People" by Daniel C. Dennett
 
-As dangerous as money counterfeiting might have been in the past, faking people can be far more deadly to the future of human freedom. 
-Current AI technology has already made it challenging for people, even the most skeptical ones, to distinguish AI expressions from those of actual humans.
-A possible consequence of this breakthrough, as Dennett described, is the "[the destruction] of not just economies but human freedom itself."
-Exploiting humans' natural tendency to imagine a person sitting across us in an online conversation, AI is able to feed in false information and manipulate people to make uninformed decisions.
-One of these decisions could be related to government policies, and thus the democratic freedom of informed voters could be threatened.
-While one important figure can persuade the crowd, AI technology has the ability to create new entities with better imitation.
-This implication elevate the negative impact of counterfeit people and call for a higher degree of regulations.
-
-distrust
-
-Due to these consequences, Dennett expressed his view of seriously punishing related actors who facilitate or allow counterfeit people to roam the internet and manipulate actual human beings.
-The regulation and penalties should be implemented in two parts. First, companies who have the capacity to create fake people with AI must include easily identifiable and permanent watermark
-that tells people of its artificial nature. Second, companies who manufacture devices with access to online platforms must include a software that read this watermark and indentified those messages as artificial.
+As dangerous as money counterfeiting might have been, faking people can be far more deadly to the future of human freedom. 
+Current artificial intelligence technology has already made it challenging for even the most cautious to distinguish AI expressions from those of actual humans. A possible consequence of this breakthrough, as Dennett described, is the "[the destruction] of not just economies but human freedom itself." Exploiting "intentional stance," a human natural tendency to materialize a person sitting across us from an online conversation, malicious AI can as convincing as the best speakers. Should we be careless, we would be fed false information and manipulated to make uninformed decisions. One of these decisions could be related to government policies, and thus the democratic freedom of informed voters could be threatened. While avoiding these pifalls, we may stumble into a society where no trust can be formed digitally, and people end up ignoring what is happening around them.
 
 
-One main obstacle to the implementation of regulations against counterfeit people is that often
+Due to these consequences, Dennett expressed his view of seriously punishing related actors who facilitate or allow counterfeit people to roam the internet and manipulate actual human beings. The regulation and penalties should be implemented in two parts. First, companies who have the capacity to create fake people with AI must include easily identifiable and permanent watermark that tells people of its artificial nature. Second, companies who manufacture devices with access to online platforms must include a software that search for this watermark and indentified those messages as artificial. This is to deter both the creation and the unconcerned "passing along" of counterfeit people.
+
+Due to the adaptive nature of AI technology, the product need not be malevolent on its own to be misused by its user. Thus, it is important that AI companies should be held accountable for any misuse of its products and derivatives that result in counterfeit people regardless of the intensions of their creators. Dennett believes that this preventive regulation, together with unforgiving punishment to AI companies, will be able to prevent the impending doom to human freedom from happening—but only if we act fast.
+
+While the proposed solution sounds foolproof if implemented correctly, it might be incredibly challenging in the current environment. Large corporations, which has the most to gain from manipulating the public, have close tie with policymakers whose main objective might be prolonging being in powerful position and not the greater good. At this point, we have learned to not blindly trust, so why should people trust their government to enforce these regulations in the first place?
+
+As Dennett said himself that the AI can evolve on its own, it is logical to assume that they will eventually adapt to the watermark detection system or find a way to remove the watermark entirely. The more regulations and barriers in place, the more training data AI have. Without breaking this learning and evolving cycle, programmers will eventually fall behind the AI. As weird as this proposition might sound, I believe that some counterfeit people should be intentionally left undetected so as to slow down AI evolution. By keeping the AI gene pool diluted, we might be able to keep its potential in check and give us enough time to work on a more permanent solution.
 
