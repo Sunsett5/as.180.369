@@ -1,4 +1,4 @@
-Summary: "The Problem With Counterfeit People" by Daniel C. Dennett
+# Summary: "The Problem With Counterfeit People" by Daniel C. Dennett
 
 Counterfeiting has always been a serious crime. Fake money, for instance, still brings about serious punishment despite not having an immediate harmful effect. Compared to the imminent "counterfeit people," though, fake bills will become just a small nuisance. AI disguised as humans poses a real threat the future of human freedom, a threat that needs to be addressed immediately.
 
