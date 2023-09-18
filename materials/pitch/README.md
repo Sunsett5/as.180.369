@@ -9,6 +9,8 @@ research paper.
 
 [Zoom Meeting (Meeting ID # 943 5190 2371; Passcode 487000)](https://JHUBlueJays.zoom.us/j/94351902371?pwd=Z0JTbFhxbk9wTHlPM08rUnhtR0xIZz09)
 
+[Zoom recording. Requires JHU login.](https://livejohnshopkins-my.sharepoint.com/:v:/g/personal/mzahn2_jh_edu/EQTq2wtktIRCmEADI4K6oIEBfdt3ONcp5aTzttASTncz2Q?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0RpcmVjdCJ9fQ&e=grzeEz)
+
 **Agenda**
 1. **CR**, **CC**, **MZ** tool micro-demos (50 mins)
     - [Github.com](https://github.com) Demo (10 mins)
@@ -42,19 +44,41 @@ research paper.
     - [Jupyterhub](http://jhu.econ-ark.org) Check (5 mins): Log in.
     - [`git`](https://docs.github.com/en/get-started/quickstart/hello-world) and [`gh`](https://cli.github.com/manual/examples) Check: From Jupyrerhub, clone your fork, make a commit, and push back to Github. (10 mins)
 3. **CC**, **MZ** overview of term paper & process (15 mins): What is the overall goal of the term paper? What process will we follow? What do we want to accomplish through the pitch process?
-4. [Litmaps](https://www.litmaps.com/)
-    - How would one construct a nice litmap of the topic of Rate of Return by President
-5. [Sign up for 2 of the 16 starting topics](https://github.com/llorracc/as.180.369/issues/1).
+5. [Sign up for 2 of the starting topics](https://github.com/llorracc/as.180.369/issues/1).
 
 **Homework**
 - Choose your 2 topics on Github
-- Make 2 LitMaps that correspond to the two topics you have selected
+- Prepare a markdown file in your contrib folder with your thoughts on the topic and what your initial hypothesis for the relationship is.
+- You are welcome to use resources like ChatGPT for this assignment.
 
 ## Mon Sep 18: Tools—BibTeX & PaperPile
 
 **Agenda**
-- [BibTeX](https://bibtex.org/)
-- [PaperPile](…)
+1. **MZ** Example Python code analyzing the rate of return vs Presidential party. (15 min.)
+2. **CC**, **MZ** [BibTeX](https://www.bibtex.com) (30 min.)
+    - [What is BibTeX?](https://www.bibtex.com/g/bibtex-format/#what-is-bibtex)
+    - [BibTeX format explained](https://www.bibtex.com/g/bibtex-format/#bibtex-format-explained)
+    - Discussion of BibTeX issues
+3. **CC**, **MZ** [Litmaps](https://www.litmaps.com/) (45 min.)
+    - [Synchronous Litmaps demonstration](https://www.youtube.com/watch?v=TJ_wkVDQBrs)
+        - Finding literature via Litmaps
+4. **CC**, **MZ** [Paperpile](https://paperpile.com/) (45 min.)
+    - Create a free trial Paperpile account
+    - Connect your account to the jhu library for help in finding papers
+    - Sharing vs exporting bibliographies
+    - How do you organize your Paperpile folders?
+    - [Synchronous Paperpile demonstration](https://www.youtube.com/watch?v=0p2QbrmePKk)
+5. **CC**, **MZ** Sharing BibTeX files between Paperpile & Litmaps (15 min)
+
+**Homework**
+- Use Litmaps to conduct two literature searches 
+    - 1 search for each of the topics you have selected to pitch.
+- Prepare yourself to discuss, in the next class, what you found in your literature searches.
+    - Review this [additional Paperpile resource](https://www.youtube.com/watch?v=y7vDPfSr-k0)     
+    - You will need to explain why you picked some papers and did not include all of them.
+    - You will need to identify what you think are the most important papers, **and why**.
+    - You will need to discuss which of your two topics seems more promising.
+        - based upon your review of the literatures.
 
 ## Mon Sep 25: Research Pitches
 
@@ -78,4 +102,4 @@ items:
 - 10 minutes per student + 5 min Q&A + 5 min Allocation (×9 students = 180 min)
 
 **Homework**
-- Review [Matt Zahn's ‘Job Talk’](#) and provide line-edits via Github
+- Review [Matt Zahn's ‘Job Talk’](#) and provide line-edits via Github 
