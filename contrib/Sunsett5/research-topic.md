@@ -20,7 +20,7 @@ I expect the result to be a comparison of this business model with other more tr
 
 **Introduction**
 
-There are 2 inputs in the simple production function: Labor and Capital. In return, the two factors receive income as a share of total private income. Lately, there has been a decline in the labor share of private income. IMF attributed half of the decline to technologial advancement, namely information and telecommunication technology and automation. In other words, the demand for labor and the proportion of labor-intensive industry is decreasing.
+There are 2 inputs in the simple production function: Labor and Capital. In return, the two factors receive income as a share of total private income. Lately, there has been a decline in the labor share of private income. IMF attributed half of the decline to technologial advancement, namely information and telecommunication technology and automation.[1](https://www.imf.org/en/Blogs/Articles/2017/04/12/drivers-of-declining-labor-share-of-income) In other words, the demand for labor and the proportion of labor-intensive industry is decreasing.
 
 The simplification of production function such as Cobb-Douglas function is useful for studying aggregate changes; however, technological impact on skilled (high-income) and low-skilled (low-skilled) is different. Thus, analyzing them separately could yield useful insights.
 
