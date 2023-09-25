@@ -15,6 +15,8 @@ I have had some experience with structural models such as Bayesian VAR. There is
 I expect the result to be a comparison of this business model with other more traditional models. I might be able to determine how much each model contributes to the actual figures observed (assuming that the reality is a mix of the two). 
 
 <br/>
+
+_Optional_ Monetary and productivity shock (efficient/ inefficient)
    
 **2. Changes in labor share and capital share of private income**
 
