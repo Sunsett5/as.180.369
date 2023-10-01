@@ -1,1 +1,1 @@
-**Convergence of Aggregate Productivity in Eurozone countries**
+**A Heterogeneous-agents Model of Economic Growth with Risk Averse Behavior**
