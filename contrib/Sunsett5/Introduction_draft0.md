@@ -8,6 +8,6 @@ In order to explain such observations, economic models with new assumptions are 
 
 This assumption is open to question because agents in financial markets have different risk tolerance and preference of assets. The choice agents make also depends on macroeconomic variables such as policy interest rate, world interest rate, inflation, political stability, and volatility of the market. Since investing in innovative companies, whether with fixed income assets or equities, can generate high return at a cost of higher risk, this characteristic allows us to distinguish between innovative and non-innovative investment decisions.
 
-
+We can test the robustness of our findings with panel of ... countries with ... variables.
 
 
