@@ -70,13 +70,12 @@ T = 500
 
 def Euc_dist_inv(A,foreign,ind):
     
-    # Prevent Eu = zero array at start
     
-    if np.all(A == 1): Eu = np.ones_like(A)
+    Eu = np.divide(1,abs(A-A[ind]), out = np.full(np.shape(A),-1, dtype='float64'), where=A[ind]!=A)
     
-    else: Eu = np.divide(1,abs(A-A[ind]), out = np.full(np.shape(A),0, dtype='float64'), where=A[ind]!=A)
-    
-    
+    # Prevent ZeroDivisionError by setting the result equal to the maximum value
+    Eu[Eu == -1] = np.max(Eu)
+    Eu[ind] = 0
     
     Eu *= foreign
     
@@ -100,10 +99,41 @@ IM = np.zeros((T,M,N,S))
 # Success rate of IN, IM
 theta_IN = np.zeros((T,M,N,S))
 theta_IM = np.zeros((T,M,N,S))
+# Market share
+f = np.zeros((T,M,N,S))
+f = np.full((T,M,N,S), 1/S) #check!!
+# Capital Stock
+K = np.zeros((T,M,N,S))
+K[0:2]=1
+# Desired capital stock
+Kd = np.zeros((T,M,N,S))
+# Price of consumer goods
+p = np.zeros((T,M,N,S))
+# Mark up price
+m = np.zeros((T,M,N,S))
+m = np.full((T,M,N,S), 1.2) #remove
+# Nominal wage
+W = np.zeros((T,M,N,S))
+W = np.full((T,M,N,S), 1)
+# Desired Production
+Qd = np.zeros((T,M,N,S))
+# Actual Production
+Q = np.zeros((T,M,N,S))
+# Demand
+D = np.zeros((T,M,N,S))
+D = np.full((T,M,N,S), 1.2) #remove
+# Expansion Investment
+Ie = np.zeros((T,M,N,S))
+# Replacement Investment
+Ir = np.zeros((T,M,N,S))
+# Total domestic production of capital sector
+Qk = np.zeros((T,N))
+# Labor employed in capital sector
+Lk = np.zeros((T,N))
 
 for t in range(1,T):
     
-    
+    # Provisionary dynamics
     SS[t] = SS[t-1]*1.1
     
     # R&D Expenditure
@@ -148,6 +178,41 @@ for t in range(1,T):
     A[t] = np.maximum(A[t-1], A_IN[t], A_IM[t])
     print(A[:,0,0,4])
     print(t)
+    
+    # Evolution of mark-up ratio
+    m[t] = m[t-1]*(1+v*(f[t-1]-f[t-2])/f[t-2])
+    
+    # Price with mark-up
+    p[t] = (1+m[t])*W[t]/A[t]
+    
+    # Desired Production (Myopic)
+    Qd[t] = D[t-1]
+    
+    # Actual Production
+    Q[t] = np.minimum(Qd[t], K[t]/B)
+    
+    # Desired capital
+    Kd[t] = B*Qd[t]
+    
+    # Expansion Investment due to limited capital
+    Ie[t] = np.minimum(0, Kd[t]-K[t])
+    
+    # Replacement Investment due to capital depreciation
+    Ir[t] = delta*K[t]
+    
+    # Dynamics of Capital Stock
+    K[t+1] = K[t] + Ie[t]
+    
+    # Total domestic capital production
+    Qk[t,:] = np.sum(Ie[t]+Ir[t], axis=(0,2))
+    
+    # Labor employed in the capital sector
+    Lk[t] = Qk[t]/np.average(A[t], axis=(0,2))
+    
+    # Price tracks unit cost of production ??
+    pass
+
+    
     
 print(A_IN[:,0,0,0])
     
