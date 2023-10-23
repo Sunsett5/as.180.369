@@ -70,7 +70,14 @@ T = 500
 
 def Euc_dist_inv(A,foreign,ind):
     
-    Eu = np.divide(1,abs(A-A[ind]), out = np.zeros_like(A), where=A[ind]!=A)
+    # Prevent Eu = zero array at start
+    
+    if np.all(A == 1): Eu = np.ones_like(A)
+    
+    else: Eu = np.divide(1,abs(A-A[ind]), out = np.full(np.shape(A),0, dtype='float64'), where=A[ind]!=A)
+    
+    
+    
     Eu *= foreign
     
     return Eu
@@ -78,23 +85,25 @@ def Euc_dist_inv(A,foreign,ind):
 # Initiate Variables
 
 # Sales
-SS = np.zeros((T,N,M,S))
-SS[0]=1
+SS = np.zeros((T,M,N,S))
+SS[0]=10
 # R&D expenditure
-RD = np.zeros((T,N,M,S))
+RD = np.zeros((T,M,N,S))
 # Productivity
-A = np.zeros((T,N,M,S))
+A = np.zeros((T,M,N,S))
 A[0]=1
-A_IN = np.zeros((T,N,M,S))
-A_IM = np.zeros((T,N,M,S))
+A_IN = np.zeros((T,M,N,S))
+A_IM = np.zeros((T,M,N,S))
 # Innovative expenditure and Imitative expenditure
-IN = np.zeros((T,N,M,S))
-IM = np.zeros((T,N,M,S))
+IN = np.zeros((T,M,N,S))
+IM = np.zeros((T,M,N,S))
 # Success rate of IN, IM
-theta_IN = np.zeros((T,N,M,S))
-theta_IM = np.zeros((T,N,M,S))
+theta_IN = np.zeros((T,M,N,S))
+theta_IM = np.zeros((T,M,N,S))
 
 for t in range(1,T):
+    
+    
     SS[t] = SS[t-1]*1.1
     
     # R&D Expenditure
@@ -106,22 +115,39 @@ for t in range(1,T):
     theta_IN[t] = np.minimum(theta_max, 1 -np.exp(-xi_IN *IN[t]))
     theta_IM[t] = np.minimum(theta_max, 1 -np.exp(-xi_IN *IN[t]))
     
+    # Success of imitation
+    IM_success = np.random.binomial(1, theta_IM[t])
+    
     # 2nd tep: Maximum of A, A_IN,, A_IM
     A_IN[t] = A[t-1]*(1+np.random.binomial(1, theta_IN[t])* \
-              (x1_l+np.random.beta(alp1, beta1, (N,M,S)))*(x1_u -x1_l))
+              (x1_l+np.random.beta(alp1, beta1, (M,N,S)))*(x1_u -x1_l))
         
-    for i in N:
+    for i in range(N):
         # Augment foreign imitation penalty
-        foreign = np.fill(shape = (T,N,S), fill_value = 1/eps)
-        foreign[:,i,:] = 1
+        foreign = np.full(shape = (N,S), fill_value = 1/eps)
+        foreign[i,:] = 1
         
-        for h in M:
-            for j in S:
-                # Euclidian distance
-                Eu_inv = Euc_dist_inv(A[t-1,:,h,:], foreign, (t-1,i,h,j))
-                A_IM[t,i,h,j] = A[t-1,:,h,:][t-1np.random.multinomial(1, Eu_inv/sum(Eu_inv))
+        for h in range(M):
+            for j in range(S):
+                
+                # Find target firm if imitation is successful
+                if IM_success[h,i,j] == 1:                        
+                
+                    # Euclidian distance
+                    Eu_inv = Euc_dist_inv(A[t-1,h,:,:], foreign, (i,j))
+                    
+                    # Multinomial Result
+                    mult = np.random.multinomial(1, np.reshape(Eu_inv/np.sum(Eu_inv),N*S))
+                    (i_IM,j_IM) = tuple(np.argwhere(np.reshape(mult,(N,S))==1)[0])
+                    
+                    A_IM[t,h,i,j] = A[t-1,h,i_IM,j_IM]
+                    
+                else: A_IM[t,h,i,j] = A[t-1,h,i,j]
+                
     
-    A[t] = np.maximum(A[t-1], A_IN[t])
+    A[t] = np.maximum(A[t-1], A_IN[t], A_IM[t])
+    print(A[:,0,0,4])
+    print(t)
     
 print(A_IN[:,0,0,0])
     
