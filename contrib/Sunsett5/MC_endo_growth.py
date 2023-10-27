@@ -10,16 +10,38 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 
+# Define Functions
+def Euc_inv(A):
+    
+    A = A.reshape(N, S, 1, 1)               # Reshape A to N x S x 1 x 1
+    Euc = abs(A - A.T).transpose(0,1,3,2)   # Compute pairwise differences
+    if np.all(Euc==0): 
+        Euc = np.ones_like(Euc, dtype='float64')
+    else:
+        Euc[Euc==0] = np.min(Euc[Euc>0])
+    
+    Euc *= F
+    Euc[in_i[:, np.newaxis], in_j[np.newaxis, :], in_i[:, np.newaxis], in_j[np.newaxis, :]] = -1.0
+    Euc_inverse = Euc**(-1)
+    Euc_inverse[in_i[:, np.newaxis], in_j[np.newaxis, :], in_i[:, np.newaxis], in_j[np.newaxis, :]] = 0
+    
+    return Euc_inverse
+
+def e_pair(e_i):
+    
+    e_i = e_i.reshape(N,1)
+    return e_i*(e_i.T**(-1))
+
 # Parameter Values
 
-# Number of Countries
-N = 60
 # Number of Industries
 M = 30
+# Number of Countries
+N = 60
 # Number of firms (each industry)
 S = 20
 # Sectoral demand shares
-d_h = 1/30
+d_h = 1/M
 # Capital-output ratio
 B = 3
 # Mark-up adjustment parameter
@@ -44,6 +66,13 @@ theta_max = 0.75
 (x2_l, x2_u) = (-0.03,0.15)
 # Foreign imitation penalty
 eps = 5
+# Foreign Penalty Matrix
+in_i, in_j = np.arange(N), np.arange(S)
+F = np.full((N,S,N,S),eps)
+# No penalty for same country
+F[in_i[:, np.newaxis], :, in_i[:, np.newaxis], :] = 1
+# Prevent ZeroDivisionError for same firm
+#F[i[:, np.newaxis], j[np.newaxis, :], i[:, np.newaxis], j[np.newaxis, :]] = -1
 # Foreign competition penalty
 tau = 0.05
 # Replicator dynamics parameter
@@ -59,112 +88,133 @@ delta = 0.02
 # Monte-Carlo replications
 mc_sims = 50
 # Time Steps
-T = 500
+T = 505
+T_start = 2
 
-'''def Euc_dist_inv_scalar(x,y):
-    
-    if x == y: return 0
-       
-    else: return 1/abs(x-y)'''
-
-
-def Euc_dist_inv(A,foreign,ind):
-    
-    
-    Eu = np.divide(1,abs(A-A[ind]), out = np.full(np.shape(A),-1, dtype='float64'), where=A[ind]!=A)
-    
-    # Prevent ZeroDivisionError by setting the result equal to the maximum value
-    Eu[Eu == -1] = np.max(Eu)
-    Eu[ind] = 0
-    
-    Eu *= foreign
-    
-    return Eu
+  
 
 # Initiate Variables
 
 # Sales
-SS = np.zeros((T,M,N,S))
-SS[0]=10
+#SS = np.zeros((T,M,N,S))
+#SS[0:T_start]=20
 # R&D expenditure
 RD = np.zeros((T,M,N,S))
 # Productivity
-A = np.zeros((T,M,N,S))
-A[0]=1
+A = np.zeros((T,M,N,S), dtype='float64')
+A[0:T_start]=1.0
 A_IN = np.zeros((T,M,N,S))
 A_IM = np.zeros((T,M,N,S))
+A_av = np.zeros((T,N)) # National average productivity
+A_av[0:T_start]=1.0
+A_av_g = np.zeros((T,N))
 # Innovative expenditure and Imitative expenditure
 IN = np.zeros((T,M,N,S))
 IM = np.zeros((T,M,N,S))
 # Success rate of IN, IM
 theta_IN = np.zeros((T,M,N,S))
 theta_IM = np.zeros((T,M,N,S))
+# Exchange Rate Matrix
+e_i = np.zeros((T,N))
+e_i[0:T_start+1] = 1
+e = np.ones((T,N,N))
 # Market share
-f = np.zeros((T,M,N,S))
-f = np.full((T,M,N,S), 1/S) #check!!
-# Capital Stock
-K = np.zeros((T,M,N,S))
-K[0:2]=1
+    # f(t,h,i,j,k) = Market share of Time t, Industry h, Country of origin i, firm j, Operating in country k
+f = np.zeros((T,M,N,S,N)) 
+f[0:T_start] = 1/(N*S) #fix to dynamics
+f_j = np.zeros((T,M,N,S)) # Average Market share of Time t, Industry h, Country of origin i, firm j
+f_j[0:T_start] = 1/(N*S)
+# Cost of Production
+CGS = np.zeros((T,M,N,S))
+# Competitiveness (international)
+    # E(t,h,i,j,k) = Competitveness of Time t, Industry h, Country of origin i, firm j, Operating in country k
+E = np.zeros((T,M,N,S,N))
+    # E_av(t,h,k) = Average Competitiveness of Time t, Industry h, in Market Country k
+E_av = np.zeros((T,M,N))
 # Desired capital stock
 Kd = np.zeros((T,M,N,S))
-# Price of consumer goods
-p = np.zeros((T,M,N,S))
 # Mark up price
 m = np.zeros((T,M,N,S))
-m = np.full((T,M,N,S), 1.2) #remove
+m[0:T_start] = 0.2 #check value
 # Nominal wage
-W = np.zeros((T,M,N,S))
-W = np.full((T,M,N,S), 1)
+W = np.zeros((T,N))
+W[0:T_start+1] = 1 # fix
+# Price of consumer goods
+p = np.zeros((T,M,N,S))
+p[0:T_start+1]= (1+m[0])*W[0,np.newaxis,:,np.newaxis]/A[0]
 # Desired Production
 Qd = np.zeros((T,M,N,S))
 # Actual Production
 Q = np.zeros((T,M,N,S))
 # Demand
 D = np.zeros((T,M,N,S))
-D = np.full((T,M,N,S), 1.2) #remove
+D[0:T_start] = 10
+D_mat = np.zeros((T,M,N,S,N))
+D_int = np.zeros((T,M,N,S))
+D_exp = np.zeros((T,M,N,S))
+# Capital Stock
+K = np.zeros((T,M,N,S))
+K[0:T_start+1]= D[0]*B
 # Expansion Investment
 Ie = np.zeros((T,M,N,S))
 # Replacement Investment
 Ir = np.zeros((T,M,N,S))
-# Total domestic production of capital sector
-Qk = np.zeros((T,N))
+# Labor employed in consumer goods sector
+Lc = np.zeros((T,M,N,S))
 # Labor employed in capital sector
 Lk = np.zeros((T,N))
+# Total Labor employed
+L = np.zeros((T,N))
+# Aggregate Demand
+AD = np.zeros((T,N))
+# National Consumption
+C = np.zeros((T,N))
+# National Investment (domestic production of capital sector)
+I = np.zeros((T,N))
+# National Exports
+EXP = np.zeros((T,N))
+# National Imports
+IMP = np.zeros((T,N))
+# Trade Balance
+TB = np.zeros((T,N))
+# GDP
+Y = np.zeros((T,N))
+Y_world = np.zeros(T)
 
-for t in range(1,T):
-    
-    # Provisionary dynamics
-    SS[t] = SS[t-1]*1.1
+for t in range(T_start,T-1):
     
     # R&D Expenditure
-    RD[t] = rho*SS[t-1]
+    RD[t] = rho*Q[t-1]
     IN[t] = lamb*RD[t]
     IM[t] = (1-lamb)*RD[t]
     
     # 1st step: determine success rate of IN and IM search
     theta_IN[t] = np.minimum(theta_max, 1 -np.exp(-xi_IN *IN[t]))
-    theta_IM[t] = np.minimum(theta_max, 1 -np.exp(-xi_IN *IN[t]))
+    theta_IM[t] = np.minimum(theta_max, 1 -np.exp(-xi_IM *IM[t]))
     
-    # Success of imitation
+    
+    # Success of Innovation and Imitation
+    IN_success = np.random.binomial(1, theta_IN[t])
     IM_success = np.random.binomial(1, theta_IM[t])
     
     # 2nd tep: Maximum of A, A_IN,, A_IM
-    A_IN[t] = A[t-1]*(1+np.random.binomial(1, theta_IN[t])* \
-              (x1_l+np.random.beta(alp1, beta1, (M,N,S)))*(x1_u -x1_l))
+    A_IN[t] = A[t-1]*IM_success* \
+              ((x1_l+np.random.beta(alp1, beta1, (M,N,S)))*(x1_u -x1_l))
         
-    for i in range(N):
-        # Augment foreign imitation penalty
-        foreign = np.full(shape = (N,S), fill_value = 1/eps)
-        foreign[i,:] = 1
+    
+    for h in range(M):
         
-        for h in range(M):
+        Eu_inv_Mat = Euc_inv(A[t-1,h,:,:])
+        
+        for i in range(N):
+            
             for j in range(S):
                 
                 # Find target firm if imitation is successful
                 if IM_success[h,i,j] == 1:                        
                 
                     # Euclidian distance
-                    Eu_inv = Euc_dist_inv(A[t-1,h,:,:], foreign, (i,j))
+                    Eu_inv = Eu_inv_Mat[i,j]
                     
                     # Multinomial Result
                     mult = np.random.multinomial(1, np.reshape(Eu_inv/np.sum(Eu_inv),N*S))
@@ -176,14 +226,7 @@ for t in range(1,T):
                 
     
     A[t] = np.maximum(A[t-1], A_IN[t], A_IM[t])
-    print(A[:,0,0,4])
-    print(t)
     
-    # Evolution of mark-up ratio
-    m[t] = m[t-1]*(1+v*(f[t-1]-f[t-2])/f[t-2])
-    
-    # Price with mark-up
-    p[t] = (1+m[t])*W[t]/A[t]
     
     # Desired Production (Myopic)
     Qd[t] = D[t-1]
@@ -191,11 +234,27 @@ for t in range(1,T):
     # Actual Production
     Q[t] = np.minimum(Qd[t], K[t]/B)
     
+    # Labor employed in the consumer goods sector
+    Lc[t] = Q[t]/A[t]
+    
+    # Cost of Production
+    #CGS[t] = 
+    
+    # National Average Productivity A_av[t] = np.average(A[t], axis=(0,2))
+    A_av[t] = np.sum(Q[t],axis=(0,2))/np.sum(Lc[t],axis=(0,2))
+    
+    # Growth rate of National Average Productivity
+    A_av_g[t] = A_av[t]/A_av[t-1] -1
+    
+    # Evolution of mark-up ratio
+    m[t] = m[t-1]*(1+v*(f_j[t-1]-f_j[t-2])/f_j[t-2])
+        
+    
     # Desired capital
     Kd[t] = B*Qd[t]
     
     # Expansion Investment due to limited capital
-    Ie[t] = np.minimum(0, Kd[t]-K[t])
+    Ie[t] = np.maximum(0, Kd[t]-K[t])
     
     # Replacement Investment due to capital depreciation
     Ir[t] = delta*K[t]
@@ -204,15 +263,72 @@ for t in range(1,T):
     K[t+1] = K[t] + Ie[t]
     
     # Total domestic capital production
-    Qk[t,:] = np.sum(Ie[t]+Ir[t], axis=(0,2))
+    I[t] = np.sum(Ie[t]+Ir[t], axis=(0,2))
     
     # Labor employed in the capital sector
-    Lk[t] = Qk[t]/np.average(A[t], axis=(0,2))
+    Lk[t] = I[t]/A_av[t]
+    
+    # Totla Labor employed
+    L[t] = np.sum(Lc[t], axis=(0,2)) + Lk[t] #???? check
+    
+    # Dynamics of Wage
+    W[t] = W[t-1]*(1+ psi1*A_av_g[t])
+    #W[t] = 
+    
+    # Price with mark-up
+    p[t] = (1+m[t])*W[t,np.newaxis,:,np.newaxis]/A[t]
     
     # Price tracks unit cost of production ??
     pass
 
+    # Calculate Sales for current time step
+    #SS[t] = Q[t]
+    
+    # Aggregate Consumption
+    C[t] = W[t]*L[t]
+    
+    # Dynamics of Exchange Rates
+    if t > T_start:
+        e_i[t] = e_i[t-1]*(1+gam*TB[t-1]/Y_world[t-1] +np.random.multivariate_normal(np.ones(N),sige*np.eye(N)))
+    e[t] = e_pair(e_i[t])  
+    
+    print(t)
+    
+    # Competitiveness of internationally operated firms
+    E[t] = ((1+tau)*p[t,:,:,:,np.newaxis]*e[t,np.newaxis,:,np.newaxis,:])**(-1)
+    E_av[t] = np.sum(E[t]*f[t-1], axis = (1,2))
+    
+    # Dynamics of Market Shares
+    f[t] = f[t-1]*(1 -chi+ chi*(E[t]/E_av[t,:,np.newaxis,np.newaxis,:]))
+    f_j[t] = np.average(f[t], axis = 3)
+    
+    # Exit and Entry
     
     
-print(A_IN[:,0,0,0])
+    # Demand Matrix for the whole system
+    D_mat[t] = d_h *  W[t,np.newaxis,np.newaxis,np.newaxis,:] * L[t,np.newaxis,:,np.newaxis,np.newaxis] * e[t,np.newaxis,:,np.newaxis,:]* f[t]
+    D_int[t] = D_mat[t,:,in_i,:,in_i].transpose(1,0,2)
+    D_exp[t] = np.sum(D_mat[t], axis=(3)) - D_int[t]
+    D[t] = D_int[t] + D_exp[t]
+    
+    
+    # Aggregate Export/ Import
+    EXP[t] = np.sum(D_exp[t], axis=(0,2))
+    IMP[t] = C[t] - np.sum(D_int[t], axis=(0,2))
+    TB[t] = EXP[t] - IMP[t]
+    
+    #AD[t] = EXP[t] -IMP[t] + C[t]
+    
+    # GDP
+    Y[t] = C[t] + I[t] + TB[t]
+    Y_world[t] = np.sum(Y[t],axis=0)
+
+    
+    #print(np.sum(TB[t]*e[t]))
+    #print(np.max(f_j[t]))
+    #print(IN_success)
+    print(np.max(f[t,1]))
+
+    
+#print(A_IN[:,0,0,0])
     
