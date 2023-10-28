@@ -1,0 +1,14 @@
+# ref: https://jupyterbook.org/en/stable/customize/config.html
+
+title: First Jupyter Book
+author: Cameron Riddell
+execute:
+  execute_notebooks: force
+
+bibtex_bibfiles:
+  - references.bib
+  - more-references.bib
+
+sphinx:
+  config:
+    bibtex_reference_style: author_year
