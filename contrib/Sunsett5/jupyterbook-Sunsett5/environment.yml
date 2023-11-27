@@ -1,0 +1,11 @@
+name: Navigating Change: An Evolutionary Study of Innovation, Competition, and Convergence in Economics
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10.4
+  - numpy=1.23.1
+  - matplotlib=3.5.2
+  - pandas=1.4.4
+  - scikit-learn=1.3.2
+  - linearmodels=5.3
+  - pip
